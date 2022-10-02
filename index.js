@@ -4,6 +4,7 @@ import { abi, contractAddress } from "./constants.js"
 // VAR HTML IDs
 const connectButton = document.getElementById("connectButton")
 const submitButton = document.getElementById("submitButton")
+const txLink = document.getElementById("txLink")
 
 // Functions
 connectButton.onclick = connect
@@ -61,7 +62,12 @@ function listenForTransactionMine(transactionResponse, provider) {
     return new Promise((resolve, reject) => {
         try {
             provider.once(transactionResponse.hash, (transactionReceipt) => {
-                console.log(`Completed with ${transactionReceipt.confirmations} confirmations. `)
+                console.log(`Completed with ${transactionReceipt.confirmations} confirmations.`)
+                txLink.innerHTML = "View TX on etherscan"
+                txLink.setAttribute(
+                    "href",
+                    `https://goerli.etherscan.io/tx/${transactionResponse.hash}`
+                )
                 resolve()
             })
         } catch (error) {
